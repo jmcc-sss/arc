@@ -1,0 +1,17 @@
+name: Build Docker Image
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: arc-runners-esp
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Build Image
+      run: |
+          docker build -t my-app:${{ github.sha }} .
+          docker run -d --name ted my-app:${{ github.sha }}
+          docker logs ted
+          docker rm ted
